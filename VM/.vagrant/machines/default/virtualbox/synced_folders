@@ -1,0 +1,1 @@
+{"virtualbox":{"/home/vagrant/project":{"type":"virtualbox","guestpath":"/home/vagrant/project","hostpath":"D:/studying/job hunt/Fullstack/microservices/authService","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"D:/studying/job hunt/Fullstack/microservices/authService/VM","disabled":false,"__vagrantfile":true}}}

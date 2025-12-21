@@ -1,0 +1,58 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/focal64"
+  config.vm.hostname = "docker-vm"
+
+  # Forward PostgreSQL so your Windows backend can connect
+  # binding host port with vm's port AKA port forwarding, for docker to later bind vm's ports with the container's ensuring seamless connection from host to container
+  config.vm.network "forwarded_port", guest: 5432, host: 5432
+
+  # Sync your project folder from Windows → VM
+  config.vm.synced_folder "../", "/home/vagrant/project", type: "virtualbox"
+
+  # VM hardware settings
+  config.vm.provider "virtualbox" do |vb|
+    #vb.name = "docker-vm"
+    vb.memory = 4096
+    vb.cpus = 2
+  end
+
+  # ---------------------------------------------------------
+  # Provision: Install Docker + run PostgreSQL container
+  # ---------------------------------------------------------
+  config.vm.provision "shell", inline: <<-SHELL
+    # Update packages
+    sudo apt-get update -y
+
+    # Install Docker
+    sudo apt-get install -y \
+      apt-transport-https \
+      ca-certificates \
+      curl \
+      gnupg-agent \
+      software-properties-common
+
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    sudo add-apt-repository \
+      "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+
+    sudo apt-get update -y
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+
+    # Allow vagrant user to run docker without sudo
+    sudo usermod -aG docker vagrant
+
+    # ---------------------------------------------------------
+    # Auto-run PostgreSQL container if not already running
+    # ---------------------------------------------------------
+    if [ "$(docker ps -aq -f name=pg)" = "" ]; then
+      # Container does not exist → create it
+      docker run --name pg \
+        -e POSTGRES_PASSWORD=pass123 \
+        -p 5432:5432 \
+        -d postgres:16
+    else
+      # Container exists → start it
+      docker start pg
+    fi
+  SHELL
+end
