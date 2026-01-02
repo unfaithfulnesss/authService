@@ -1,5 +1,6 @@
 package com.example.authservice.security;
 
+import com.example.authservice.exceptions.InvalidCredentialsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -62,7 +63,7 @@ public class SecurityConfig {
                                 "/auth/login",
                                 "/auth/register",
                                 "/auth/forgot-password",
-                                "/auth/refresh-token"
+                                "/auth/refresh"
                         ).permitAll()
 
                         // everything else requires authentication
