@@ -67,5 +67,13 @@ public class JwtService {
     }
 
 
+    public String extractRole(String jwt) {
+        return Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(jwt)
+                .getBody()
+                .get("role", String.class);
+    }
 }
 

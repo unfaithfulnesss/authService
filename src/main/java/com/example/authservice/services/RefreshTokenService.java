@@ -69,11 +69,7 @@ public class RefreshTokenService {
             } catch (Exception e){
                 throw new RefreshTokenRevokedException("Refresh token reuse detected");
             }
-
-
-
         }
-
 
         if (token.getExpiresAt().isBefore(Instant.now())) {
             token.setExpired(true);

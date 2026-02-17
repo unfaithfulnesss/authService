@@ -49,7 +49,8 @@ public class AuthController {
         // If we reach here, authentication succeeded
         //UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        User user = userRepository
+
+            User user = userRepository
                 .findByEmail(request.email())
                 .orElseThrow();
 
@@ -90,20 +91,20 @@ public class AuthController {
         return ResponseEntity.noContent().build();
     }
 
-    //testing protected endpoint
-    @GetMapping("/me")
-    public ResponseEntity<?> me(Authentication authentication) {
-        Authentication auth =
-                SecurityContextHolder.getContext().getAuthentication();
-
-        System.out.println(auth.getName());
-        return ResponseEntity.ok(
-                Map.of(
-                        "principal", authentication.getPrincipal(),
-                        "username", authentication.getName(),
-                        "authorities", authentication.getAuthorities()
-                )
-        );
-    }
+      //testing protected endpoint
+//    @GetMapping("/me")
+//    public ResponseEntity<?> me(Authentication authentication) {
+//        Authentication auth =
+//                SecurityContextHolder.getContext().getAuthentication();
+//
+//        System.out.println(auth.getName());
+//        return ResponseEntity.ok(
+//                Map.of(
+//                        "principal", authentication.getPrincipal(),
+//                        "username", authentication.getName(),
+//                        "authorities", authentication.getAuthorities()
+//                )
+//        );
+//    }
 
 }

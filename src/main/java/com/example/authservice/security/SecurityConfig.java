@@ -1,7 +1,9 @@
 package com.example.authservice.security;
 
 import com.example.authservice.exceptions.InvalidCredentialsException;
+import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -22,8 +24,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 
 public class SecurityConfig {
-
-    private final JwtAuthenticationFilter jwtAuthFilter;
+    @Autowired
+    public JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -69,9 +71,8 @@ public class SecurityConfig {
                         // everything else requires authentication
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-
 }
